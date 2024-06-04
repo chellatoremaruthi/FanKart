@@ -1,0 +1,264 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model HomeViewModel
+<!DOCTYPE html>
+<html>
+<body>
+    <div class="filter-container">
+        <h3>Filters</h3>
+        <form id="filterForm" asp-action="Filter" asp-controller="Home" method="get">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="category">Category:</label>
+                    <select id="categoryId" name="categoryId">
+                        <option value="" selected>Select an option</option>
+                        @foreach (var option in Model.Categories)
+                        {
+                            <option value="@option.CategoryId">@option.CategoryName</option>
+                        }
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="brand">Brand:</label>
+                    <select id="brandId" name="brandId">
+                        <option value="" selected>Select an option</option>
+                        @foreach (var option in Model.Brands)
+                        {
+                            <option value="@option.BrandId">@option.BrandName</option>
+                        }
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="size">Size:</label>
+                    <select id="sizeId" name="sizeId">
+                        <option value=""selected>Select an option</option>
+                        @foreach (var option in Model.Sizes)
+                        {
+                            <option value="@option.SizeId">@option.SizeDescription</option>
+                        }
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button id="filter-button" class="btn btn-primary" type="button">Filter</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="cardsHolderDiv" class="cardsHolderDiv">
+        @Html.Partial("_Card", Model.Cards)
+    </div>
+    
+</body>
+</html>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        var filterButton = document.getElementById("filter-button");
+        var filterForm = document.getElementById("filterForm");
+        var cardsHolderDiv = document.getElementById("cardsHolderDiv");
+
+        filterButton.addEventListener("click", function () {
+            var formData = new FormData(filterForm);
+            fetch(filterForm.action + "?" + new URLSearchParams(formData), {
+                method: "GET",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            })
+                .then(function (response) {
+                    return response.text();
+                })
+                .then(function (data) {
+                    cardsHolderDiv.innerHTML = data;
+                })
+                .catch(function (error) {
+                    console.error("Error:", error);
+                });
+        });
+    });
+</script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+    }
+
+
+
+    /* Styles for Filters */
+    .filter-container {
+        background-color: black;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px;
+        text-align: center;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .cardsHolderDiv {
+        overflow-y: auto; /* Allow cards to scroll */
+        max-height: fit-content; /* Set a maximum height for the scrollable area */
+        padding: 10px;
+        /* Add other styles as needed */
+    }
+
+    .filter-row {
+        display: flex; 
+        justify-content: center;
+        align-items: center; 
+    }
+
+    .filter-group {
+        display: flex; 
+        align-items: center; 
+        margin-right: 20px;
+    }
+
+    label {
+        margin-right: 10px;
+        font-weight: bold;
+    }
+
+    select {
+        padding: 8px;
+        background-color: #f5f5f5;
+        color: #333;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+
+    /* Styles for Item Cards */
+    .item-container{
+        display: flex;
+    }
+
+    .item-card {
+        background-color: white;
+        color: black;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin: 20px;
+        width: 600px;
+        text-align: center;
+        display: flex;
+        flex-direction: row; /* Set the flex direction to row */
+        align-items: center; /* Center items vertically */
+        overflow: hidden;
+        justify-content: space-between; /* Space between items */
+        height: 320px; /* Set a fixed height for the item-card */
+    }
+
+    .item-image-container {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .item-image {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .item-details {
+        text-align: center;
+        width: 50%;
+        padding: 0 10px;
+    }
+
+    h4 {
+        font-size: 18px;
+        margin: 10px 0;
+    }
+
+    p {
+        font-size: 14px;
+        margin: 5px 0;
+    }
+
+    .share-options {
+        /* Style share options as needed */
+    }
+
+    .item-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 10px 0;
+    }
+
+    label, select {
+        font-weight: bold;
+    }
+
+    .item-sizes {
+        padding: 8px;
+        background-color: #f5f5f5;
+        color: #333;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 70px; 
+    }
+
+    .quantity-control {
+        display: flex;
+        align-items: center;
+    }
+
+    button {
+        background-color: black;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .increment {
+        background-color: black;
+        margin-left: 5px;
+    }
+
+    .decrement {
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+
+    .quantity {
+        width: 50px;
+    }
+
+    .add-to-cart {
+        background-color: black;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .no-items-div {
+        justify-content: center;
+        font-size: 25px;
+        margin-top: 100px;
+    }
+</style>

@@ -1,0 +1,163 @@
+﻿@page
+@model FanKart.Areas.Payment.Pages.PaymentModel;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+@{
+    ViewData["Title"] = "Payment";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}   
+
+
+
+<div class="payment-container">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <h2 style="text-align: center; font-size:30px">Payment</h2>
+    <h5>Amount Payable: @Model.Input.TotalPrice</h5>
+   
+    <form asp-page="Payment" method="post" id="paymentForm">
+        <input asp-for="Input.SavedCards" type="hidden"/>
+        <input asp-for="Input.SelectedCardId" id="selectedCardId" type="hidden" />
+        
+        <a id="addNewAddress" class="anchorLink" asp-page="address" asp-area="address" class="btn">Click here to add address or choose from addresses below</a>
+        <div class="form-group">
+            <label for="Address">Address</label>
+            <select asp-for="Input.AddressId" id="addressDropdown" class="form-control" required>
+                <option value="">Select an address</option>
+                @foreach (var address in Model.Input.UserAddresses)
+                {
+                    <option value="@address.AddressId">@address.FirstName @address.LastName - @address.AddressLine1, @address.State, @address.ZipCode</option>
+                }
+            </select>
+            <span asp-validation-for="Input.AddressId" class="text-danger"></span>
+        </div>
+        <div class="row emptyDiv"></div>
+        <h3>Saved Cards</h3>
+        <div>
+            @if(Model.Input.SavedCards.Count > 0)
+            {
+                @foreach (var card in Model.Input.SavedCards)
+                {
+                    <div class="saved-card">
+                        <div>
+                            <input type="checkbox" class="savedCardCheckbox" id="@card.CardId" />
+                            <label>
+                                @card.CardHolderName
+                            </label>
+                        </div>
+                        <div class="card-details">
+                            <div class="card-number">@card.MaskedCardNumber</div>
+                            <div class="expiry-date">Expiry Date: @card.Expiry</div>
+                        </div>
+                    </div>
+                }
+                <div class="form-floating">
+                    <input asp-for="Input.SelectedCardSecurity" id="ENC_SelectedCardSecurity" class="form-control" />
+                    <label asp-for="Input.SelectedCardSecurity"></label>
+                    <span asp-validation-for="Input.SelectedCardSecurity" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <h5>No Saved Cards. Save cards for faster checkout.</h5>
+            }
+            
+        </div>
+        <div class="row emptyDiv"></div>
+        <a id="addNewCardButton" class="anchorLink"  asp-page="paymentnewcard" asp-area="paymentnewcard" class="btn">Click here to add card information and complete payment</a>
+        <div class="row emptyDiv"></div>
+        <div>
+            <button type="submit" onclick="encryptAndSubmit(event)" class="btn btn-primary">Make Payment</button>
+        </div>
+       
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <style>
+        .payment-container {
+            margin: 0 auto;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            color: black;
+        }
+
+        /* Saved Cards */
+        .saved-card {
+            display: flex;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #fff;
+            flex-direction: column;
+            font-size: 25px;
+        }
+
+            .saved-card input[type="checkbox"] {
+                margin-right: 10px;
+            }
+
+        .card-details {
+            flex: 1;
+            padding-left: 150px;
+        }
+
+        /* Add New Card */
+        .new-card .form-group {
+            margin: 10px 0;
+        }
+
+        /* Submit Button */
+        button[type="submit"] {
+            margin: 20px 0;
+        }
+
+        .anchorLink {
+            color: #0d6efd;
+            text-align:center;
+            justify-content:center;
+            align-items: center;
+            display: flex;
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var currentUrl = window.location.href;
+            if (currentUrl.includes("isNotValid")) {
+                showMessage('error', "Entered security code is not correct. Can not proceed with payment");
+            }
+            $('.savedCardCheckbox').on('click', function () {
+                var checkbox = $(this);
+                var id = $(this).attr('id');
+                $('#selectedCardId').val(id);
+                $('.savedCardCheckbox').not(this).prop('checked', false);
+            });
+        });
+        
+        function encryptAndSubmit() {
+            
+            encryptElement('ENC_SelectedCardSecurity');
+        }
+
+        function encryptAndSubmit(event) {
+            var checkboxes = document.querySelectorAll('.savedCardCheckbox');
+            var anyCheckboxSelected = Array.from(checkboxes).some(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (anyCheckboxSelected && $('#addressDropdown').val() !== '') {
+                encryptElement('ENC_SelectedCardSecurity');
+            } else {
+                event.preventDefault();
+                showMessage('error', "Please select a card and address with which you want to proceed with payment. You can click on Add Card to enter card information and proceed with payment");
+            }
+        }
+
+    </script>
+}
