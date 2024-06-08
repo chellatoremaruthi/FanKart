@@ -7,7 +7,7 @@ So to work on local environment
   Once cloned click on .sln file
   ![image](https://github.com/chellatoremaruthi/FanKart/assets/76154795/36786cdf-cfb1-4358-bd81-f91800852534)
 
-We already have a Azure SQl with all the scripts executed may be we can connect to azure database instead of downloading sql and running the scripts.
+We already have a Azure SQl with all the scripts executed may be we can connect to azure database instead of downloading sql and running the scripts. We have a password which is removed in appsettings.json file. this password is shared in our whatsapp group
 
 Once project is opened click on Build -> Build Solution present on top bar
 Click on solution explorer -> Right click on Fankart -> Properties
