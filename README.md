@@ -19,6 +19,10 @@ Once properties tab is presented click on Debug -> General -> Open debug launch 
 From popup under environment variables add key ASPNETCORE_ENVIRONMENT and values Production
 ![image](https://github.com/chellatoremaruthi/FanKart/assets/76154795/93b46068-3af5-4f90-aa81-6903dcaadfa5)
 
+
+Add-Migration migration_name -Context FanKartAppDbContext
+Update-database -Context FanKartAppDbContext
+
 The set up is done and we can run the solution now
 
 if we wish to run the project on sql server from local environment
@@ -130,6 +134,18 @@ create table dbo.OrderProductMap
 )
 
 
+CREATE TABLE [dbo].[OTPDetails](
+	[Id] [uniqueidentifier] NOT NULL,
+	[UserId] [nvarchar](max) NOT NULL,
+	[Otp] [nvarchar](max) NOT NULL,
+	[ExpiryTime] [datetime2](7) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+ CONSTRAINT [PK_OTPDetails] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
 
 Alter table dbo.Product 
 Add  ImagePath varchar(1000)
@@ -138,6 +154,13 @@ Alter Column ProductName varchar(100)
 
 Alter table dbo.Product
 Alter Column ProductDescription varchar(100)
+
+alter table dbo.orders
+drop column IsDelivered
+alter table dbo.orders
+add  IsVerified bit
+
+
 
 ![image](https://github.com/chellatoremaruthi/FanKart/assets/76154795/35be7dc6-fe37-4f56-bcfe-741846814ceb)
 
@@ -232,6 +255,13 @@ Insert into dbo.Product values ('Paris Saint-Germain Nike Local Verbiage Scarf',
 Insert into dbo.Product values ('Manchester City Collage Scarf - Sky Blue/Navy', 'Manchester City Collage Scarf - Sky Blue/Navy', 3, 8, 'IMG-47')
 Insert into dbo.Product values ('Manchester City 17oz. Personalized Bold Crest Water Bottle', 'Manchester City 17oz. Personalized Bold Crest Water Bottle', 2, 8, 'IMG-48')
 
+insert into dbo.Size values
+(1,'S','Small'),
+(2,'M','Medium'),
+(3,'L','Large'),
+(4,'XL','X-Large'),
+(5,'XXL','XX-Large'),
+(6,'U','Universal')
 
 --first insert all product with 500 as price
 
