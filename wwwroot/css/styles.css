@@ -1,11 +1,11 @@
 ﻿.btn-primary {
-    background-color: black !important;
+    background-color: #0078d7 !important;
     color: #fff;
-    border-color: black !important;
+    border-color: #0078d7 !important;
 }
 
 .black-background {
-    background-color: black;
+    background-color: white;
     color: white;
 }
 
@@ -15,4 +15,18 @@
 
 .emptyDiv {
     height: 25px;
+}
+
+#dropdown-header {
+    color: #fff !important;
+    box-shadow: 0 0 0 0 !important;
+}
+
+.dropdown-item {
+    background-color: white !important;
+    color: #04102C !important;
+}
+
+.header-dropdown-menu {
+    z-index: 3;
 }

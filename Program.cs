@@ -59,6 +59,11 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+app.MapGet("/", async context =>
+{
+    context.Response.Redirect("/Identity/Account/Login");
+});
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Landing}/{action=Index}/{id?}");

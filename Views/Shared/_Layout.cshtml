@@ -28,11 +28,11 @@
 </head>
 <body class="black-background">
     <header class="black-background">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color:black; color:white !important">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color:white; color:black !important">
             <div class="container-fluid">
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <a class="navbar-brand" style="color:white !important" asp-area="" asp-controller="Home" asp-action="Index">FanKart</a>
+                    <a class="navbar-brand" style="color:black !important" asp-area="" asp-controller="Home" asp-action="Index">FanKart</a>
                     <form id="searchForm" asp-action="Search" asp-controller="Home" method="get">
                         <div class="search-box" style="display: flex; justify-content: center; align-items: center;">
                             <input type="text" id="searchText" name="searchText" placeholder="Search" class="ui-autocomplete-input" autocomplete="off" style="width: 400px;">
@@ -43,7 +43,7 @@
                 }
                 else
                 {
-                    <a class="navbar-brand" style="color:white !important" asp-area="" asp-controller="Landing" asp-action="Index">FanKart</a>
+                    <a class="navbar-brand" style="color:black !important" asp-area="" asp-controller="Landing" asp-action="Index">FanKart</a>
                 }
                
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -74,7 +74,6 @@
 
     /* Style for the search input field */
     #searchText {
-        border: 2px solid #2A420C; /* Border color */
         padding: 10px;
         border-radius: 5px;
         width: 200px;
@@ -175,11 +174,23 @@
     });
 
     document.addEventListener("DOMContentLoaded", function () {
-        var searchButton = document.getElementById("search-button");
+
+        var searchButton = document.getElementById("searchButton");
         var searchText = document.getElementById("searchText");
         var cardsHolderDiv = document.getElementById("cardsHolderDiv");
 
-        searchButton.addEventListener("click", function () {
+        $('#searchForm').submit(function (event) {
+            // Prevent the default form submission
+            event.preventDefault();
+            performSerach();
+        });
+        if (searchButton) {
+            searchButton.addEventListener("click", function () {
+                performSerach();
+            });
+        }
+
+        function performSerach() {
             var query = searchText.value;
             fetch("/Home/Search?searchText=" + query, {
                 method: "GET",
@@ -196,6 +207,25 @@
                 .catch(function (error) {
                     console.error("Error:", error);
                 });
+        };
+
+
+ 
+
+        $('#dropdown-header').on('click', function () {
+            if ($(this).hasClass('expanded')) {
+                $(this).removeClass('expanded');
+                $('.header-dropdown-menu').hide();
+            }
+            else {
+                $(this).addClass('expanded');
+                $('.header-dropdown-menu').show();
+            }
+        });
+
+        $('.dropdown-item').on('click', function () {
+            $('#dropdown-header').removeClass('expanded');
+            $('.header-dropdown-menu').hide();
         });
     });
 </script>
