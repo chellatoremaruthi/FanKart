@@ -18,14 +18,22 @@
         <div class="input-group-append">
             <button class="btn btn-primary dropdown-toggle" id="dropdown-header" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</button>
             <div class="header-dropdown-menu" style="display:none; position: absolute">
+                <a class="dropdown-item" asp-area="Orders" asp-page="/Orders">My Orders</a>
+                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Landing", new { area = "" })">
+@*                     <a id="logout" type="submit" style="color:white;background-color:#0078d7 !important" class="">Logout</a>
+ *@                    <button class="dropdown-item" id="logout" type="submit" >Logout</button>
 
+                </form>
+                @* <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Landing", new { area = "" })">Logout</a>
+                <a class="dropdown-item" asp-area="Instructor" asp-page="/ManageInstructor/ListCourses">View Courses</a>
+                <a class="dropdown-item" asp-area="Learner" asp-page="/EnrolledCourses">My Learnings</a> *@
                    
-        <li class="nav-item" style="width:50px;">
+        @* <li class="nav-item" style="width:50px;">
             <a asp-area="Orders" asp-page="/Orders"><img src="~/Images/UserIcon.jpeg" style="width:40px;height:40px;"></a>
         </li>
                 <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Landing", new { area = "" })">
             <button id="logout" type="submit" style="color:white;background-color:#0078d7 !important" class="">Logout</button>
-                </form>
+                </form> *@
 
             </div>
         </div>

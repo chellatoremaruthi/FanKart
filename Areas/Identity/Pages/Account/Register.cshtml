@@ -4,8 +4,11 @@
     ViewData["Title"] = "Register";
 }
 
-<div class="row">
-    <div class="col-md-9">
+<div class="row" style="height:80vh">
+    <div class="col-md-6 d-flex align-items-center justify-content-center">
+        <img src="~/images/fankart.jpg" style="width:100%; height:100%" />
+    </div>
+    <div class="col-md-6">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h2>Create a new account.</h2>
             <hr />
